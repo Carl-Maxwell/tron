@@ -5,32 +5,32 @@ var app = new PIXI.Application(800, 600, { transparent: true });
 document.body.appendChild(app.view);
 
 // create a new Sprite from an image path.
-var bunny = PIXI.Sprite.fromImage('https://pixijs.io/examples/required/assets/bunny.png');
+var player = PIXI.Sprite.fromImage('https://pixijs.io/examples/required/assets/bunny.png');
 
 // center the sprite's anchor point
-bunny.anchor.set(0.5);
+player.anchor.set(0.5);
 
 // move the sprite to the center of the screen
-bunny.x = app.screen.width / 2;
-bunny.y = app.screen.height / 5 * 4;
+player.x = app.screen.width / 2;
+player.y = app.screen.height / 5 * 4;
 
-app.stage.addChild(bunny);
+app.stage.addChild(player);
 
 // draw the trailing line 
 
 let trail = new PIXI.Graphics();
 app.stage.addChild(trail);
 
-let points = [new Victor(bunny.x, bunny.y)]
+let points = [new Victor(player.x, player.y)]
 
-Input.on('right', () => { bunny.rotation += Math.PI * 0.5; })
-Input.on('left', () => { bunny.rotation -= Math.PI * 0.5; })
+Input.on('right', () => { player.rotation += Math.PI * 0.5; })
+Input.on('left', () => { player.rotation -= Math.PI * 0.5; })
 
 app.ticker.add(function (deltaTime) {
 
     trail.clear();
 
-    let newPoint = new Victor(bunny.x, bunny.y)
+    let newPoint = new Victor(player.x, player.y)
 
     if (newPoint.distance(points.slice(-1)[0]) > 4) {
         points.push(newPoint)
@@ -50,21 +50,21 @@ app.ticker.add(function (deltaTime) {
 
     let speed = 4 * deltaTime;
 
-    let rad = degrees2radian(bunny.rotation)
+    let rad = degrees2radian(player.rotation)
 
-    let v = new Victor(0, -1).rotate(bunny.rotation).multiplyScalar(speed)
+    let v = new Victor(0, -1).rotate(player.rotation).multiplyScalar(speed)
 
-    bunny.x += v.x;
-    bunny.y += v.y;
+    player.x += v.x;
+    player.y += v.y;
 
     // detect a collision with your own trail
     for (point of points.slice(0, -5)) {
-        let playerPosition = new Victor(bunny.x, bunny.y)
+        let playerPosition = new Victor(player.x, player.y)
         if (playerPosition.distance(new Victor(point.x, point.y)) < 10)
             location.reload()
     }
 
     // detect a collision with the edge of the screen
-    if (bunny.x < 0 || bunny.y < 0 || bunny.x > app.screen.width || bunny.y > app.screen.height)
+    if (player.x < 0 || player.y < 0 || player.x > app.screen.width || player.y > app.screen.height)
         location.reload()
 });
